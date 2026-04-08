@@ -1,0 +1,90 @@
+# ======================
+# GLOBAL (cualquier nivel)
+# ======================
+**/.DS_Store
+**/Thumbs.db
+**/*.log
+**/*.tmp
+**/*.swp
+**/*.swo
+**/.env
+**/.env.*
+**/*.local
+
+# ======================
+# NODE / REACT / REACT NATIVE
+# ======================
+**/node_modules/
+**/.expo/
+**/.expo-shared/
+**/.metro-cache/
+
+# Builds
+**/dist/
+**/build/
+**/.next/
+**/out/
+**/coverage/
+
+# ======================
+# ANDROID / KOTLIN
+# ======================
+**/.gradle/
+**/build/
+**/out/
+**/*.iml
+**/.idea/
+**/captures/
+**/.cxx/
+**/.externalNativeBuild/
+
+# APK / AAB
+**/*.apk
+**/*.aab
+
+# ======================
+# FLUTTER / DART
+# ======================
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.packages
+**/.pub-cache/
+**/.pub/
+**/.flutter-versions
+
+# ======================
+# iOS (React Native / Flutter)
+# ======================
+**/ios/Pods/
+**/ios/build/
+**/ios/.symlinks/
+
+# ======================
+# ANDROID (React Native / Flutter)
+# ======================
+**/android/.gradle/
+**/android/app/build/
+
+# ======================
+# IDEs / EDITORES
+# ======================
+**/.vscode/
+**/.idea/
+**/*.code-workspace
+
+# ======================
+# LOCK FILES (opcional)
+# ======================
+# Descomenta si NO quieres subirlos
+# **/package-lock.json
+# **/yarn.lock
+# **/pnpm-lock.yaml
+# **/pubspec.lock
+
+# ======================
+# OTROS
+# ======================
+**/*.bak
+**/*.orig
+**/*.rej
