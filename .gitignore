@@ -88,3 +88,5 @@
 **/*.bak
 **/*.orig
 **/*.rej
+
+.gitignore
