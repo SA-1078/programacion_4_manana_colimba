@@ -1,27 +1,27 @@
 fun main() {
     println("Controles de Flujo when")
     println("Escribe codigo")
-    val codigo = readLine()?.toIntOrNull()?: 0
-    val especialidad = when(codigo){
-        1->"Medicina general"
-        2-> "Pedriatria"
-        3-> "Cardiologia"
-        4-> "Ginecologia"
-        5-> "Neurologia"
-        6-> "Dermatologia"
-        else -> "Especialidad no registrada en el sistema"
-    }
+    val codigo = readLine()?.toIntOrNull() ?: 0
+    val especialidad =
+            when (codigo) {
+                1 -> "Medicina general"
+                2 -> "Pedriatria"
+                3 -> "Cardiologia"
+                4 -> "Ginecologia"
+                5 -> "Neurologia"
+                6 -> "Dermatologia"
+                else -> "Especialidad no registrada en el sistema"
+            }
     println("Especialidad: $especialidad")
-
 }
-
+"""
 fun main() {
     println("Controles de Flujo when")
-    println("Seleccione el tipo de procesamiento:") 
+    println("Seleccione el tipo de procesamiento:")
     println("1. Sangre venosa")
-    println("2. Orina") 
-    println("3. Heces") 
-    println("4. Hisopado nasofaringeo") 
+    println("2. Orina")
+    println("3. Heces")
+    println("4. Hisopado nasofaringeo")
     println("5. Biopsia")
     println("Escriba su respuesta (1-5): ")
     val codigo = readLine()?.toIntOrNull()?: 0
@@ -34,3 +34,4 @@ fun main() {
         else -> "Especialidad no registrada en el sistema"
     }
     println("Tipo de muestra: $procesamiento", )
+"""
