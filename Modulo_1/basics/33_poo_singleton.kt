@@ -28,3 +28,4 @@ fun main() {
     val u = Usuario.crear("Ana", "ana@test.com")
     println(u) // Usuario(id=1, nombre=Ana García)
 }
+

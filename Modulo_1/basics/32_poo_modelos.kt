@@ -1,3 +1,5 @@
+package modulo1.basics.p32
+
 data class Producto(
         val id: Int,
         val nombre: String,
@@ -19,8 +21,10 @@ fun main() {
     println(p1 == p3) // false
 
     // copy() — nuevo objeto con cambios puntuales
-    val barato = p1.copy(precio = 59.99)
-    val inactivo = p1.copy(activo = false)
+    val barato = p1.copy(precio = 59.99) // crea una copia de p1 con el precio modificado
+    val inactivo = p1.copy(activo = false) // crea una copia de p1 con el activo en false
+    println(barato) // Producto(id=1, nombre=Teclado mecánico, ...)
+    println(inactivo) // Producto(id=1, nombre=Teclado mecánico, ...)
 
     // Desestructuración
     val (id, nombre, precio) = p1

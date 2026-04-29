@@ -1,3 +1,5 @@
+package modulo1.basics.p35
+
 data class Categoria(val id: Int, val nombre: String)
 
 data class Producto(
@@ -60,4 +62,8 @@ fun main() {
     CatalogoProductos.disponibles()
         .map { it.aplicarDescuento(10.0) }
         .forEach { println("  ${it.nombre}: ${"%.2f".format(it.precio)}") }
+
+    for (producto in CatalogoProductos.listar()) {
+        println("${producto.nombre} - ${producto.precioConIva}")
+    }
 }

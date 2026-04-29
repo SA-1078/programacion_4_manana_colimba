@@ -1,3 +1,5 @@
+package modulo1.basics.p25
+
 // El usuario de esta clase solo sabe QUÉ puede hacer con un Producto
 // No necesita saber cómo se calcula precioConIva ni cómo funciona disponible
 class Producto(
