@@ -7,13 +7,19 @@ import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
 import com.tuapp.compose.ui.S07_StateHoistingScreen
 import com.tuapp.compose.ui.S08_BienvenidaScreen
+import com.tuapp.contactos.ui.Paso03_LazyColumnScreen
+import com.tuapp.contactos.ui.Paso04_ScaffoldScreen
 import com.ute.compose.ui.S01_SaludoScreen
 import com.ute.compose.ui.S03_ButtonScreen
 import com.ute.compose.ui.S04_LayoutScreen
 import com.ute.compose.ui.S05_ModifierScreen
+import com.ute.compose.ui.material3.Paso01CompraTiendaScreen
 import com.ute.compose.ui.material3.Paso01SumaPreview
+import com.ute.compose.ui.material3.Paso06_DialogosScreen
 import com.ute.compose.ui.screens.*
 import com.ute.contactos.ui.Paso01_TextFieldScreen
+import com.ute.contactos.ui.Paso02_CardScreen
+import com.ute.contactos.ui.Paso05_NavBarScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,13 +36,14 @@ class MainActivity : ComponentActivity() {
                 // S07_StateHoistingScreen()
                 // S08_BienvenidaScreen()
                 // Paso01_TextFieldScreen()
-                Paso01SumaPreview()
+                // Paso01SumaPreview()
                 // Paso01_TextFieldScreen()
+                // Paso01CompraTiendaScreen()
                 // Paso02_CardScreen()
                 // Paso03_LazyColumnScreen()
-                // Paso04_ScaffoldScreen()
-                // Paso05_NavBarScreen()
-                // Paso06_DialogosScreen()   // ← paso activo
+                Paso04_ScaffoldScreen()
+                Paso05_NavBarScreen()
+                Paso06_DialogosScreen()   // ← paso activo
             }
         }
     }
