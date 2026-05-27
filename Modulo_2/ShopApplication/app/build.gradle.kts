@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,20 +9,34 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
+
+val apiBaseUrl = localProperties.getProperty(
+    "API_BASE_URL",
+    "http://10.0.2.2:8000/api/"
+)
+
 android {
     namespace = "com.shopapp"
     compileSdk = 35
 
     defaultConfig {
         applicationId = "com.shopapp"
-        minSdk = 24
-        targetSdk = 34
+        minSdk = 26
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField("String", "API_BASE_URL", "\"https://api.example.com/\"")
+        buildConfigField(
+            "String",
+            "API_BASE_URL",
+            "\"$apiBaseUrl\""
+        )
     }
 
     buildFeatures {
@@ -28,50 +44,59 @@ android {
         buildConfig = true
     }
 
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
     }
 }
 
 dependencies {
-    // Core & Lifecycle
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.navigation.compose)
-
-    // Compose
+    // ── Compose BOM ───────────────────────────────────────
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons.extended)
+    debugImplementation(libs.androidx.compose.ui.tooling)
 
-    // Hilt
+    // ── Core Android ──────────────────────────────────────
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.activity.compose)
+
+    // ── Navegación ────────────────────────────────────────
+    implementation(libs.androidx.navigation.compose)
+
+    // ── Hilt DI ───────────────────────────────────────────
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
-    // Retrofit & OkHttp
-    implementation(libs.retrofit.core)
+    // ── Retrofit + OkHttp ─────────────────────────────────
+    implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
-    implementation(libs.okhttp.client)
-    implementation(libs.okhttp.logging)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
 
-    // DataStore
+    // ── DataStore ─────────────────────────────────────────
     implementation(libs.androidx.datastore.preferences)
 
-    // Coroutines
+    // ── Coroutines ────────────────────────────────────────
     implementation(libs.kotlinx.coroutines.android)
 
-    // Serialization
+    // ── Serialización ─────────────────────────────────────
     implementation(libs.kotlinx.serialization.json)
 
-    // Coil
+    // ── Coil imágenes ─────────────────────────────────────
     implementation(libs.coil.compose)
 
-    debugImplementation(libs.androidx.compose.ui.tooling)
+    // ── Testing ─────────────────────────────────────────
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
 }
