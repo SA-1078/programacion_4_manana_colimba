@@ -1,6 +1,6 @@
 // Sin open — no se puede heredar (protección por defecto)
-class Electronico(val nombre: String)
-// class Movil : Electronico("X100")  // ERROR — Electronico es final
+// class ElectronicoFinal(val nombre: String)
+// class Movil : ElectronicoFinal("X100")  // ERROR — ElectronicoFinal es final
 
 // Con open — la jerarquía está diseñada para ello
 open class Electronico(val nombre: String, val marca: String) {
