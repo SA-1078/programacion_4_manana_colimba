@@ -6,6 +6,7 @@ import retrofit2.Response
 import retrofit2.http.*
 
 interface CategoryApi {
+
     @GET("categories/")
     suspend fun getCategories(): Response<PaginatedDto<CategoryDto>>
 
@@ -13,17 +14,14 @@ interface CategoryApi {
     suspend fun getCategory(@Path("id") id: Int): Response<CategoryDto>
 
     @POST("categories/")
-    suspend fun createCategory(@Body body: CategoryRequestDto): Response<CategoryDto>
+    suspend fun createCategory(@Body request: CategoryRequestDto): Response<CategoryDto>
 
-    @PATCH("categories/{id}/")
+    @PUT("categories/{id}/")
     suspend fun updateCategory(
         @Path("id") id: Int,
-        @Body body: CategoryRequestDto,
+        @Body request: CategoryRequestDto
     ): Response<CategoryDto>
 
     @DELETE("categories/{id}/")
     suspend fun deleteCategory(@Path("id") id: Int): Response<Unit>
-
-    @GET("categories/stats/")
-    suspend fun getStats(): Response<CategoryStatsDto>
 }

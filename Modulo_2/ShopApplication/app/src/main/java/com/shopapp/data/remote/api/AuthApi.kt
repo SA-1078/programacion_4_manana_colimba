@@ -7,15 +7,15 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface AuthApi {
-    @POST("com/shopapp/presentation/ui/auth/login/")
+    @POST("auth/login/")
     suspend fun login(@Body body: LoginRequest): Response<AuthResponseDto>
 
-    @POST("com/shopapp/presentation/ui/auth/register/")
+    @POST("auth/register/")
     suspend fun register(@Body body: RegisterRequest): Response<AuthResponseDto>
 
-    @POST("com/shopapp/presentation/ui/auth/token/refresh/")
+    @POST("auth/token/refresh/")
     suspend fun refreshToken(@Body body: TokenRefreshRequest): Response<TokenRefreshResponseDto>
 
-    @POST("com/shopapp/presentation/ui/auth/logout/")
+    @POST("auth/logout/")
     suspend fun logout(@Body body: LogoutRequest): Response<Unit>
 }
