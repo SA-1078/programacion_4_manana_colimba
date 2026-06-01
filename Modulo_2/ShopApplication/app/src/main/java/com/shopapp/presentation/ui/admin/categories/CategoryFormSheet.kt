@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
+import androidx.compose.material3.Surface as MaterialSurface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,12 +68,10 @@ fun CategoryFormSheet(
             Box(
                 modifier         = Modifier
                     .padding(vertical = 12.dp)
-                    .size(40.dp, 4.dp)
-                    .then(Modifier)
-                    .padding(0.dp),
+                    .size(40.dp, 4.dp),
                 contentAlignment = Alignment.Center,
             ) {
-                Surface(
+                MaterialSurface(
                     modifier = Modifier.size(40.dp, 4.dp),
                     color    = Border,
                     shape    = MaterialTheme.shapes.extraSmall,
@@ -99,7 +98,7 @@ fun CategoryFormSheet(
 
             // Error del formulario
             if (formState is CategoryFormState.Error) {
-                Surface(
+                MaterialSurface(
                     color  = Error.copy(alpha = 0.1f),
                     shape  = MaterialTheme.shapes.small,
                     modifier = Modifier.fillMaxWidth(),
@@ -159,7 +158,7 @@ fun CategoryFormSheet(
             )
 
             // Toggle activa
-            Surface(
+            MaterialSurface(
                 color  = Surface2,
                 shape  = MaterialTheme.shapes.medium,
                 modifier = Modifier.fillMaxWidth(),

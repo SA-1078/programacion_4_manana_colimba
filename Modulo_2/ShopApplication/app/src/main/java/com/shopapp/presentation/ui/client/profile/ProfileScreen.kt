@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,6 +23,7 @@ import com.shopapp.theme.*
 fun ProfileScreen(
     authViewModel: AuthViewModel,
     onLogout:      () -> Unit,
+    onNavigateToAdmin: () -> Unit,
 ) {
     val user by authViewModel.currentUser.collectAsState()
 
@@ -128,6 +130,21 @@ fun ProfileScreen(
                     }
                     if (i < 3) HorizontalDivider(color = BorderLight, thickness = 0.5.dp)
                 }
+            }
+        }
+
+        // ── Acceso Panel Admin (Solo Staff) ───────────────────
+        if (user?.isStaff == true) {
+            Spacer(Modifier.height(16.dp))
+            Button(
+                onClick = onNavigateToAdmin,
+                modifier = Modifier.fillMaxWidth().height(52.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Info),
+                shape = MaterialTheme.shapes.medium,
+            ) {
+                Icon(Icons.Default.Shield, null)
+                Spacer(Modifier.width(8.dp))
+                Text("Ir al Panel de Administración", fontWeight = FontWeight.Bold)
             }
         }
 

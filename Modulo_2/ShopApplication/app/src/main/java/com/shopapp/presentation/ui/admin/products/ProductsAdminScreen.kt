@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.compose.material3.Surface as MaterialSurface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,7 +63,7 @@ fun ProductsAdminScreen(
                 .background(Background),
         ) {
             // ── Header ────────────────────────────────────────────
-            Surface(color = Surface, tonalElevation = 0.dp) {
+            MaterialSurface(color = Surface, tonalElevation = 0.dp) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Row(
                         modifier              = Modifier.fillMaxWidth(),
@@ -255,7 +256,7 @@ private fun ProductAdminCard(
     onRestock: () -> Unit,
     onDelete:  () -> Unit,
 ) {
-    Surface(
+    MaterialSurface(
         shape    = MaterialTheme.shapes.large,
         color    = if (product.isActive) Surface else Surface.copy(alpha = 0.6f),
         modifier = Modifier.fillMaxWidth(),
@@ -311,7 +312,7 @@ private fun ProductAdminCard(
                         color      = Accent,
                     )
                     // Badge de stock
-                    Surface(
+                    MaterialSurface(
                         color = when {
                             product.stock == 0 -> Error.copy(alpha = 0.15f)
                             product.stock < 5  -> Warning.copy(alpha = 0.15f)

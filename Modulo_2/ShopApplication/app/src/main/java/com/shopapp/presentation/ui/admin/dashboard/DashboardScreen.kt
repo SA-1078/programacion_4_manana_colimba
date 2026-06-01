@@ -19,6 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.shopapp.domain.model.OrderStatus
 import com.shopapp.presentation.components.LoadingScreen
 import com.shopapp.presentation.components.orderStatusColor
+import com.shopapp.presentation.navigation.Screen
 import com.shopapp.presentation.viewmodel.DashboardUiState
 import com.shopapp.presentation.viewmodel.DashboardViewModel
 import com.shopapp.theme.*
@@ -111,7 +112,7 @@ private fun DashboardContent(
                     icon     = Icons.Default.Inventory,
                     color    = Accent,
                     hasAlert = stats.outOfStockProducts > 0,
-                    onClick  = { onNavigate("admin/products") },
+                    onClick  = { onNavigate(Screen.AdminProducts.route) },
                     modifier = Modifier.weight(1f),
                 )
                 KpiCard(
@@ -120,7 +121,7 @@ private fun DashboardContent(
                     subtitle = "${stats.totalCategories} total",
                     icon    = Icons.Default.Category,
                     color   = Info,
-                    onClick = { onNavigate("admin/categories") },
+                    onClick = { onNavigate(Screen.AdminCategories.route) },
                     modifier = Modifier.weight(1f),
                 )
             }
@@ -137,16 +138,16 @@ private fun DashboardContent(
                     icon     = Icons.Default.ShoppingBag,
                     color    = Success,
                     hasAlert = stats.pendingOrders > 0,
-                    onClick  = { onNavigate("admin/orders") },
+                    onClick  = { onNavigate(Screen.AdminOrders.route) },
                     modifier = Modifier.weight(1f),
                 )
                 KpiCard(
                     title    = "Usuarios activos",
                     value    = stats.activeUsers.toString(),
                     subtitle = "${stats.totalUsers} registrados",
-                    icon     = Icons.Default.People,
+                    icon    = Icons.Default.People,
                     color    = Warning,
-                    onClick  = { onNavigate("admin/users") },
+                    onClick  = { onNavigate(Screen.AdminUsers.route) },
                     modifier = Modifier.weight(1f),
                 )
             }
@@ -350,10 +351,10 @@ private fun DashboardContent(
                     )
                     LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         items(listOf(
-                            Triple("+ Categoría", Info,    "admin/categories"),
-                            Triple("+ Producto",  Accent,  "admin/products"),
-                            Triple("Ver pedidos", Success, "admin/orders"),
-                            Triple("Usuarios",    Warning, "admin/users"),
+                            Triple("+ Categoría", Info,    Screen.AdminCategories.route),
+                            Triple("+ Producto",  Accent,  Screen.AdminProducts.route),
+                            Triple("Ver pedidos", Success, Screen.AdminOrders.route),
+                            Triple("Usuarios",    Warning, Screen.AdminUsers.route),
                         )) { (label, color, route) ->
                             Surface(
                                 onClick  = { onNavigate(route) },

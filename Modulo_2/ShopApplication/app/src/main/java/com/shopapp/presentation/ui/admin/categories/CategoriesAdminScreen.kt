@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.compose.material3.Surface as MaterialSurface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +41,7 @@ fun CategoriesAdminScreen(
             .background(Background),
     ) {
         // ── Header ────────────────────────────────────────────
-        Surface(color = Surface, tonalElevation = 0.dp) {
+        MaterialSurface(color = Surface, tonalElevation = 0.dp) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Row(
                     modifier              = Modifier.fillMaxWidth(),
@@ -202,7 +203,7 @@ private fun CategoryAdminCard(
     onEdit:   () -> Unit,
     onDelete: () -> Unit,
 ) {
-    Surface(
+    MaterialSurface(
         shape  = MaterialTheme.shapes.large,
         color  = Surface,
         modifier = Modifier.fillMaxWidth(),
@@ -240,7 +241,7 @@ private fun CategoryAdminCard(
                         color      = TextPrimary,
                     )
                     if (!category.isActive) {
-                        Surface(
+                        MaterialSurface(
                             color  = Error.copy(alpha = 0.12f),
                             shape  = MaterialTheme.shapes.extraSmall,
                         ) {
