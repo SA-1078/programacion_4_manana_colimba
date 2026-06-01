@@ -24,4 +24,7 @@ interface CategoryApi {
 
     @DELETE("categories/{id}/")
     suspend fun deleteCategory(@Path("id") id: Int): Response<Unit>
+
+    @GET("categories/stats/")
+    suspend fun getStats(): Response<CategoryStatsDto>
 }
