@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.shopapp.theme.*
 
@@ -52,9 +53,16 @@ fun BottomNavBar(
                         onCartClick()
                     } else {
                         navController.navigate(item.screen.route) {
-                            popUpTo(Screen.Home.route) { saveState = true }
+                            // Pop up to the start destination of the graph to
+                            // avoid building up a large stack of destinations
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            // Avoid multiple copies of the same destination when
+                            // reselecting the same item
                             launchSingleTop = true
-                            restoreState    = true
+                            // Restore state when reselecting a previously selected item
+                            restoreState = true
                         }
                     }
                 },
