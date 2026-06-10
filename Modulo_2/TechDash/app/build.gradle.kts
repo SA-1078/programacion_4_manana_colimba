@@ -70,4 +70,7 @@ dependencies {
 
     // Coil para mostrar imágenes
     implementation("io.coil-kt:coil-compose:2.7.0")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation(libs.play.services.location)
+    implementation(libs.kotlinx.coroutines.play.services)
 }
