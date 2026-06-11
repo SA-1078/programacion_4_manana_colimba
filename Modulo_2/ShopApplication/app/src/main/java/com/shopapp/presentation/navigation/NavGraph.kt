@@ -198,17 +198,12 @@ fun NavGraph(
                     }
                 } else {
                     ProfileScreen(
-                        authViewModel = authViewModel,
                         onLogout = {
+                            authViewModel.logout()
                             navController.navigate(Screen.Login.route) {
                                 popUpTo(0) { inclusive = true }
                             }
                         },
-                        onNavigateToAdmin = {
-                            navController.navigate(Screen.AdminDashboard.route) {
-                                launchSingleTop = true
-                            }
-                        }
                     )
                 }
             }
