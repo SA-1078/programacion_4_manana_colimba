@@ -21,7 +21,7 @@ void main() {
 
   // null-aware con ternario
   String? colorDisponible;
-  String display = colorDisponible != null ? colorDisponible.toUpperCase() : 'Sin color especificado';
+  String display = 'Sin color especificado';
 
   // Forma más concisa con ??
   String display2 = colorDisponible?.toUpperCase() ?? 'Sin color especificado';

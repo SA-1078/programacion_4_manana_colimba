@@ -11,19 +11,17 @@ void main() {
   String? ciudad = 'Quito';
 
   // ?. — safe call (igual que en Kotlin)
-  print(ciudad?.length);      // null — no lanza excepción
+  print(ciudad.length);      // null — no lanza excepción
 
   // ?? — operador Elvis (igual que ?: en Kotlin)
   String resultado = ciudad ?? 'Sin ciudad';
   print(resultado);           // Sin ciudad
 
   // ! — non-null assertion (igual que !! en Kotlin) — úsalo con precaución
-  String ciudadSegura = ciudad!;  // lanza si ciudad es null
+  String ciudadSegura = ciudad;  // lanza si ciudad es null
 
   // Null check con if
-  if (apellido != null) {
-    print(apellido.length);   // smart cast — ya es String aquí
-  }
+  print(apellido.length);   // smart cast — ya es String aquí
 
   // late — inicialización diferida (como lateinit en Kotlin)
   late String token;
