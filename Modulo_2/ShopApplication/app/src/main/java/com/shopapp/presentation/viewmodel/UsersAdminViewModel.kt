@@ -20,12 +20,15 @@ enum class UserRoleFilter(val label: String) {
 }
 
 data class UsersAdminUiState(
-    val users:      List<User>     = emptyList(),
-    val isLoading:  Boolean        = false,
-    val error:      String?        = null,
-    val total:      Int            = 0,
-    val search:     String         = "",
-    val roleFilter: UserRoleFilter = UserRoleFilter.ALL,
+    val users:             List<User>     = emptyList(),
+    val isLoading:         Boolean        = false,
+    val isNextPageLoading: Boolean        = false,
+    val error:             String?        = null,
+    val total:             Int            = 0,
+    val search:            String         = "",
+    val roleFilter:        UserRoleFilter = UserRoleFilter.ALL,
+    val currentPage:       Int            = 0,
+    val hasReachedEnd:     Boolean        = false,
 )
 
 sealed interface UserFormState {
@@ -46,56 +49,76 @@ class UsersAdminViewModel @Inject constructor(
     private val _formState = MutableStateFlow<UserFormState>(UserFormState.Idle)
     val formState: StateFlow<UserFormState> = _formState.asStateFlow()
 
-    // Filtrado local combinado
+    // El filtrado y paginación ahora se manejan mayormente desde el servidor
+    // pero mantenemos el Flow para que la UI reaccione a cambios en users
     val filtered: StateFlow<List<User>> = _state
-        .map { s ->
-            s.users
-                .filter { u ->
-                    s.search.isBlank() ||
-                            u.username.contains(s.search, ignoreCase = true) ||
-                            u.email.contains(s.search, ignoreCase = true)
-                }
-                .filter { u ->
-                    when (s.roleFilter) {
-                        UserRoleFilter.ALL      -> true
-                        UserRoleFilter.CLIENTS  -> !u.isStaff
-                        UserRoleFilter.STAFF    -> u.isStaff
-                        UserRoleFilter.ACTIVE   -> u.isActive
-                        UserRoleFilter.INACTIVE -> !u.isActive
-                    }
-                }
-        }
+        .map { it.users }
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     private var searchJob: Job? = null
 
-    init { load() }
+    init { load(reset = true) }
 
-    fun load() {
+    fun load(reset: Boolean = false) {
+        val currentState = _state.value
+        if (currentState.isLoading || (currentState.hasReachedEnd && !reset)) return
+
+        val pageToLoad = if (reset) 1 else currentState.currentPage + 1
+
         viewModelScope.launch {
-            _state.update { it.copy(isLoading = true, error = null) }
-            repository.getUsers()
-                .onSuccess { (users, total) ->
-                    _state.update { it.copy(users = users, total = total, isLoading = false) }
+            if (reset) {
+                _state.update { it.copy(isLoading = true, error = null, hasReachedEnd = false) }
+            } else {
+                _state.update { it.copy(isNextPageLoading = true) }
+            }
+
+            val isStaff: Boolean? = when (currentState.roleFilter) {
+                UserRoleFilter.STAFF   -> true
+                UserRoleFilter.CLIENTS -> false
+                else -> null
+            }
+            val isActive: Boolean? = when (currentState.roleFilter) {
+                UserRoleFilter.ACTIVE   -> true
+                UserRoleFilter.INACTIVE -> false
+                else -> null
+            }
+
+            repository.getUsers(
+                search   = currentState.search.ifBlank { null },
+                isStaff  = isStaff,
+                isActive = isActive,
+                page     = pageToLoad
+            ).onSuccess { (newUsers, total) ->
+                _state.update { s ->
+                    val combinedList = if (reset) newUsers else s.users + newUsers
+                    s.copy(
+                        users             = combinedList,
+                        total             = total,
+                        isLoading         = false,
+                        isNextPageLoading = false,
+                        currentPage       = pageToLoad,
+                        hasReachedEnd     = combinedList.size >= total || newUsers.isEmpty()
+                    )
                 }
-                .onFailure { e ->
-                    _state.update { it.copy(isLoading = false, error = e.message) }
-                }
+            }.onFailure { e ->
+                _state.update { it.copy(isLoading = false, isNextPageLoading = false, error = e.message) }
+            }
         }
     }
 
     fun setSearch(query: String) {
         _state.update { it.copy(search = query) }
-        // Debounce para búsqueda local (ya es instantánea, pero útil si se cambia a API)
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
-            delay(300)
-            // Búsqueda ya aplicada por el filtered StateFlow
+            delay(500)
+            load(reset = true)
         }
     }
 
     fun setRoleFilter(filter: UserRoleFilter) {
+        if (_state.value.roleFilter == filter) return
         _state.update { it.copy(roleFilter = filter) }
+        load(reset = true)
     }
 
     // Toggle staff — optimista

@@ -9,11 +9,11 @@ data class UserDto(
     val id:         Int,
     val username:   String,
     val email:      String,
-    @SerializedName("first_name")  val firstName:  String,
-    @SerializedName("last_name")   val lastName:   String,
+    @SerializedName("first_name")  val firstName:  String? = null,
+    @SerializedName("last_name")   val lastName:   String? = null,
     @SerializedName("is_staff")    val isStaff:    Boolean,
     @SerializedName("is_active")   val isActive:   Boolean,
-    @SerializedName("date_joined") val dateJoined: String,
+    @SerializedName("date_joined") val dateJoined: String? = null,
     @SerializedName("num_orders")  val numOrders:  Int,
     @SerializedName("avatar_url")
     val avatarUrl:  String? = null,    // ← nuevo campo
@@ -22,8 +22,8 @@ data class UserDto(
 data class UserRequestDto(
     val username:   String,
     val email:      String,
-    @SerializedName("first_name") val firstName: String,
-    @SerializedName("last_name")  val lastName:  String,
+    @SerializedName("first_name") val firstName: String?,
+    @SerializedName("last_name")  val lastName:  String?,
     @SerializedName("is_staff")   val isStaff:   Boolean,
     @SerializedName("is_active")  val isActive:  Boolean,
     val password:   String? = null,

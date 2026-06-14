@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -32,6 +33,22 @@ fun UsersAdminScreen(
     val state     by viewModel.state.collectAsState()
     val filtered  by viewModel.filtered.collectAsState()
     val formState by viewModel.formState.collectAsState()
+
+    val listState = rememberLazyListState()
+
+    // Detectar cuando llegamos al final para cargar más
+    val shouldLoadMore by remember {
+        derivedStateOf {
+            val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()
+            lastVisibleItem != null && lastVisibleItem.index >= listState.layoutInfo.totalItemsCount - 3
+        }
+    }
+
+    LaunchedEffect(shouldLoadMore) {
+        if (shouldLoadMore && !state.isLoading && !state.isNextPageLoading && !state.hasReachedEnd) {
+            viewModel.load()
+        }
+    }
 
     var showForm    by remember { mutableStateOf(false) }
     var editTarget  by remember { mutableStateOf<User?>(null) }
@@ -64,7 +81,7 @@ fun UsersAdminScreen(
                         )
                     }
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        IconButton(onClick = viewModel::load) {
+                        IconButton(onClick = { viewModel.load(reset = true) }) {
                             Icon(Icons.Default.Refresh, null, tint = TextSecondary)
                         }
                         Button(
@@ -142,6 +159,7 @@ fun UsersAdminScreen(
             }
             else -> {
                 LazyColumn(
+                    state          = listState,
                     modifier       = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -154,6 +172,17 @@ fun UsersAdminScreen(
                             onEdit         = { editTarget = user; showForm = true },
                             onDelete       = { deleteTarget = user },
                         )
+                    }
+
+                    if (state.isNextPageLoading) {
+                        item {
+                            Box(
+                                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
+                            }
+                        }
                     }
                 }
             }
