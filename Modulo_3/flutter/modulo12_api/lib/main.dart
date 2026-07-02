@@ -5,7 +5,9 @@ import 'package:modulo12_api/pantalla_paso1_users.dart';
 
 // ── Importa cada pantalla cuando la crees (descomenta la línea) ──────────────
 import 'pantalla_paso1.dart';   // ← Paso 1
-import 'pantalla_paso2.dart';   // ← descomenta esta línea// import 'pantalla_paso3.dart';   // ← Paso 3
+import 'pantalla_paso2.dart';   // ← descomenta esta línea
+import 'pantalla_paso2_lista_ususarios.dart';
+// import 'pantalla_paso3.dart';   // ← Paso 3
 // import 'pantalla_paso4.dart';   // ← Paso 4
 // import 'pantalla_paso5.dart';   // ← Paso 5
 
@@ -49,19 +51,19 @@ final _router = GoRouter(
     // Paso 1 → cuando termines, reemplaza PantallaTemporal por PantallaPaso1()
     GoRoute(path: '/paso1', builder: (_, __) => const PantallaPaso1()),
 
-    GoRoute(path: '/paso1-users', builder: (_, __) => const PantallaPaso1Users()),
-
     // Paso 2 → reemplaza por PantallaPaso2()
     GoRoute(path: '/paso2', builder: (_, __) => const PantallaPaso2()),
 
+    GoRoute(path: '/paso2-users', builder: (_, __) => const PantallaPaso2ListaUsusarios()),
+
     // Paso 3 → reemplaza por PantallaPaso3()
-    GoRoute(path: '/paso3', builder: (_, __) => const PantallaTemporal(titulo: 'Paso 3 · API real')),
+    //GoRoute(path: '/paso3', builder: (_, __) => const PantallaTemporal(titulo: 'Paso 3 · API real')),
 
     // Paso 4 → reemplaza por PantallaPaso4()
-    GoRoute(path: '/paso4', builder: (_, __) => const PantallaTemporal(titulo: 'Paso 4 · Errores tipados')),
+    //GoRoute(path: '/paso4', builder: (_, __) => const PantallaTemporal(titulo: 'Paso 4 · Errores tipados')),
 
     // Paso 5 → reemplaza por PantallaPaso5()
-    GoRoute(path: '/paso5', builder: (_, __) => const PantallaTemporal(titulo: 'Paso 5 · Arquitectura completa')),
+    //GoRoute(path: '/paso5', builder: (_, __) => const PantallaTemporal(titulo: 'Paso 5 · Arquitectura completa')),
   ],
 );
 
@@ -111,6 +113,14 @@ class PantallaMenu extends StatelessWidget {
         detalle: 'TodoDto.fromJson · lista de tareas',
         icono: Icons.data_object,
         color: Colors.green,
+      ),
+      _PasoInfo(
+        ruta: '/paso2-users',
+        titulo: 'Paso 2-Users',
+        subtitulo: 'DTO simple - Users',
+        detalle: 'UserDto.fromJson · lista de usuarios',
+        icono: Icons.contacts,
+        color: Colors.teal,
       ),
       _PasoInfo(
         ruta: '/paso3',

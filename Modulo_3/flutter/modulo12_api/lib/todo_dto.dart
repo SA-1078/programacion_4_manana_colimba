@@ -9,6 +9,8 @@ class TodoDto {
     required this.completed,
   });
 
+  bool get pendiente => !completed;
+
   factory TodoDto.fromJson(Map<String, dynamic> json) => TodoDto(
     id:        json['id']        as int,
     title:     json['title']     as String,

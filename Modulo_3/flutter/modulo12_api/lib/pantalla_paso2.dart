@@ -36,7 +36,9 @@ class PantallaPaso2 extends StatelessWidget {
           }
 
           final todos = snap.data!;
+          final pendientes = todos.where((t) => t.pendiente).toList();
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Resumen con chips
               Padding(
@@ -51,18 +53,35 @@ class PantallaPaso2 extends StatelessWidget {
                     const SizedBox(width: 8),
                     Chip(
                       label: Text(
-                          '${todos.where((t) => !t.completed).length} pendientes'),
+                          '${todos.where((t) => t.pendiente).length} pendientes'),
                       backgroundColor: const Color.fromARGB(255, 200, 235, 3),
                     ),
+                    const SizedBox(width: 8),
+                    Chip(
+                      label: Text(
+                          '${todos.where((t) => t.title.length > 30).length} >30 carac.'),
+                      backgroundColor: const Color.fromARGB(255, 3, 169, 244),
+                    ),
                   ],
+                ),
+              ),
+              // Texto indicador
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Text(
+                  'Tareas pendientes:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               // Lista de todos
               Expanded(
                 child: ListView.builder(
-                  itemCount: todos.length,
+                  itemCount: pendientes.length,
                   itemBuilder: (context, i) {
-                    final t = todos[i];
+                    final t = pendientes[i];
                     return CheckboxListTile(
                       title: Text(t.title),
                       subtitle: Text('ID: ${t.id}'),
