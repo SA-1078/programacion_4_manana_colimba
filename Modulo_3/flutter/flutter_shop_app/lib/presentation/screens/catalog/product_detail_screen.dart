@@ -1,13 +1,15 @@
 // lib/presentation/screens/catalog/product_detail_screen.dart
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../core/config/app_config.dart';
+import '../../providers/auth_provider.dart';
 import '../../providers/catalog_provider.dart';
 import '../../providers/cart_provider.dart';
+import '../../providers/image_upload_provider.dart';
+import '../../widgets/product_image.dart';
 import '../../../domain/model/product.dart';
 
 class ProductDetailScreen extends ConsumerWidget {
@@ -19,9 +21,8 @@ class ProductDetailScreen extends ConsumerWidget {
     final state = ref.watch(catalogProvider);
     final product = state.products.firstWhere(
       (p) => p.id == productId,
-      orElse: () => state.products.isEmpty
-          ? Product.empty()
-          : state.products.first,
+      orElse: () =>
+          state.products.isEmpty ? Product.empty() : state.products.first,
     );
 
     if (state.isLoading && state.products.isEmpty) {
@@ -34,7 +35,8 @@ class ProductDetailScreen extends ConsumerWidget {
       return Scaffold(
         appBar: AppBar(),
         body: const Center(
-          child: Text('Product not found', style: TextStyle(color: AppColors.error)),
+          child: Text('Product not found',
+              style: TextStyle(color: AppColors.error)),
         ),
       );
     }
@@ -48,7 +50,8 @@ class _ProductDetailContent extends ConsumerStatefulWidget {
   const _ProductDetailContent({required this.product});
 
   @override
-  ConsumerState<_ProductDetailContent> createState() => _ProductDetailContentState();
+  ConsumerState<_ProductDetailContent> createState() =>
+      _ProductDetailContentState();
 }
 
 class _ProductDetailContentState extends ConsumerState<_ProductDetailContent> {
@@ -62,8 +65,46 @@ class _ProductDetailContentState extends ConsumerState<_ProductDetailContent> {
     final taxAmount = subtotal * AppConfig.taxRate;
     final totalWithTax = subtotal + taxAmount;
 
+    final isStaff = ref.watch(authProvider).isStaff;
+    final uploadState = ref.watch(imageUploadProvider);
+
+    ref.listen<ImageUploadState>(imageUploadProvider, (_, next) {
+      if (next is ImageUploadSuccess) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Imagen del producto actualizada.')),
+        );
+        ref.read(catalogProvider.notifier).refresh();
+        ref.read(imageUploadProvider.notifier).reset();
+      } else if (next is ImageUploadError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(next.message),
+            backgroundColor: AppColors.error,
+          ),
+        );
+        ref.read(imageUploadProvider.notifier).reset();
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(title: Text(p.name, overflow: TextOverflow.ellipsis)),
+      floatingActionButton: isStaff
+          ? FloatingActionButton.extended(
+              onPressed: uploadState is ImageUploadLoading
+                  ? null
+                  : () => ref
+                      .read(imageUploadProvider.notifier)
+                      .pickAndUploadProductImage(p.id),
+              icon: uploadState is ImageUploadLoading
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.photo_camera),
+              label: const Text('Cambiar imagen'),
+            )
+          : null,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,33 +112,11 @@ class _ProductDetailContentState extends ConsumerState<_ProductDetailContent> {
             // ── Image ─────────────────────────────────────
             Stack(
               children: [
-                Container(
-                  height: 240,
+                ProductImage(
+                  imageUrl: p.imageUrl,
                   width: double.infinity,
-                  color: AppColors.borderLight,
-                  child: p.imageUrl != null
-                      ? CachedNetworkImage(
-                          imageUrl: p.imageUrl!,
-                          fit: BoxFit.cover,
-                          placeholder: (_, __) => Container(
-                            color: AppColors.surface2,
-                            child: const Center(
-                              child: CircularProgressIndicator(color: AppColors.accent),
-                            ),
-                          ),
-                          errorWidget: (_, __, ___) => Container(
-                            color: AppColors.surface2,
-                            child: const Center(
-                              child: Text('📦', style: TextStyle(fontSize: 72)),
-                            ),
-                          ),
-                        )
-                      : Container(
-                          color: AppColors.surface2,
-                          child: const Center(
-                            child: Text('📦', style: TextStyle(fontSize: 72)),
-                          ),
-                        ),
+                  height: 240,
+                  borderRadius: BorderRadius.zero,
                 ),
                 if (outOfStock)
                   Positioned(
@@ -162,7 +181,8 @@ class _ProductDetailContentState extends ConsumerState<_ProductDetailContent> {
                   ),
                   Text(
                     '${formatPrice(totalWithTax)} with tax (${(AppConfig.taxRate * 100).toInt()}%)',
-                    style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
+                    style: const TextStyle(
+                        fontSize: 13, color: AppColors.textSecondary),
                   ),
                   const SizedBox(height: 8),
 
@@ -174,7 +194,8 @@ class _ProductDetailContentState extends ConsumerState<_ProductDetailContent> {
                         height: 8,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: outOfStock ? AppColors.error : AppColors.success,
+                          color:
+                              outOfStock ? AppColors.error : AppColors.success,
                         ),
                       ),
                       const SizedBox(width: 7),
@@ -255,7 +276,8 @@ class _ProductDetailContentState extends ConsumerState<_ProductDetailContent> {
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: const BoxDecoration(
-                        border: Border(top: BorderSide(color: AppColors.border)),
+                        border:
+                            Border(top: BorderSide(color: AppColors.border)),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -342,9 +364,7 @@ class _QuantityButton extends StatelessWidget {
           ),
         ),
         icon: Icon(icon,
-            color: onTap != null
-                ? AppColors.textPrimary
-                : AppColors.textFaint),
+            color: onTap != null ? AppColors.textPrimary : AppColors.textFaint),
         onPressed: onTap,
       );
 }
