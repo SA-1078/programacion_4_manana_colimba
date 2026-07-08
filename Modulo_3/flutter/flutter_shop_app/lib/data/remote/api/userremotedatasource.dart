@@ -22,7 +22,7 @@ class PaginatedUsers {
 }
 
 abstract class UserRemoteDatasource {
-  Future<PaginatedUsers>       getUsers({String? search, bool? isStaff, bool? isActive});
+  Future<PaginatedUsers>       getUsers({int? page, int? pageSize, String? search, bool? isStaff, bool? isActive});
   Future<User>                 createUser(Map<String, dynamic> payload);
   Future<User>                 updateUser(int id, Map<String, dynamic> payload);
   Future<void>                 deleteUser(int id);
@@ -35,9 +35,11 @@ class UserRemoteDatasourceImpl implements UserRemoteDatasource {
   UserRemoteDatasourceImpl(this._dio);
 
   @override
-  Future<PaginatedUsers> getUsers({String? search, bool? isStaff, bool? isActive}) async {
+  Future<PaginatedUsers> getUsers({int? page, int? pageSize, String? search, bool? isStaff, bool? isActive}) async {
     try {
       final params = <String, dynamic>{
+        if (page     != null) 'page':      page,
+        if (pageSize != null) 'page_size': pageSize,
         if (search   != null) 'search':    search,
         if (isStaff  != null) 'is_staff':  isStaff,
         if (isActive != null) 'is_active': isActive,
