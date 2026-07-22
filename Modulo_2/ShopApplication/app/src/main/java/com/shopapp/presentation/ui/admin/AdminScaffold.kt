@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.material3.Surface as MaterialSurface
@@ -26,11 +27,12 @@ data class AdminNavItem(
 )
 
 val ADMIN_NAV_ITEMS = listOf(
-    AdminNavItem("Dashboard",  Icons.Default.Dashboard,     "admin"),
-    AdminNavItem("Categorías", Icons.Default.Category,      "admin/categories"),
-    AdminNavItem("Productos",  Icons.Default.Inventory,     "admin/products"),
-    AdminNavItem("Pedidos",    Icons.Default.ShoppingBag,   "admin/orders"),
-    AdminNavItem("Usuarios",   Icons.Default.People,        "admin/users"),
+    AdminNavItem("Dashboard",      Icons.Default.Dashboard,     "admin"),
+    AdminNavItem("Categorías",     Icons.Default.Category,      "admin/categories"),
+    AdminNavItem("Productos",      Icons.Default.Inventory,     "admin/products"),
+    AdminNavItem("Pedidos",        Icons.Default.ShoppingBag,   "admin/orders"),
+    AdminNavItem("Usuarios",       Icons.Default.People,        "admin/users"),
+    AdminNavItem("Notificaciones", Icons.AutoMirrored.Filled.Send, "send-notification"),
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
