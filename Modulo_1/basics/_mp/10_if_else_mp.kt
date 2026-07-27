@@ -1,4 +1,4 @@
-fun main() {
+sfun main() {
     println("Controles de Flujo Ventas")
     println("Condicional if - else")
     println("Aplica descuento de cliente frecuente? (s/n):")
